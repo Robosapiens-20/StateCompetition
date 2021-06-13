@@ -190,7 +190,7 @@ public class SimpleRed extends LinearOpMode {
 
         intakeRings = drive.trajectoryBuilder(position.end())
                 .forward(50)
-                .addTemporalMarker(0.6, 0, () -> {
+                .addTemporalMarker(0.1,  () -> {
                     intake.setPower(intakePower);
                 })
                 .build();
