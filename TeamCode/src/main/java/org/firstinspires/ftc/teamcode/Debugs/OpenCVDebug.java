@@ -123,77 +123,12 @@ public class OpenCVDebug extends LinearOpMode
                 telemetry.addData("Position 0",pipeline.position );
             }
 
+
         }
     }
 
 
-    public void setDirectionForward(boolean value, double time, double power) { //time should be in milliseconds
-        String frontRightMotorName = "front_right";
-        String backrightMotorName = "back_right";
-        String frontleftMotorName = "front_left";
-        String backleftMotorName = "back_left";
-
-
-
-
-        DcMotor backRight = hardwareMap.dcMotor.get(backrightMotorName);
-        DcMotor backLeft = hardwareMap.dcMotor.get(backleftMotorName);
-        DcMotor frontRight = hardwareMap.dcMotor.get(frontRightMotorName);
-        DcMotor frontLeft = hardwareMap.dcMotor.get(frontleftMotorName);
-
-        double startTime = System.currentTimeMillis();
-        if (value) {//forward
-            telemetry.addData("forward", "starting");
-            telemetry.update();
-            backRight.setDirection(DcMotor.Direction.REVERSE);
-            backLeft.setDirection(DcMotor.Direction.FORWARD);
-            frontRight.setDirection(DcMotor.Direction.REVERSE);
-            frontLeft.setDirection(DcMotor.Direction.FORWARD);
-            backRight.setPower(-power);
-            backLeft.setPower(-power);
-            frontLeft.setPower(-power);
-            frontRight.setPower(-power);
-
-
-            while (opModeIsActive()) {
-                if ((System.currentTimeMillis() - startTime) >= time) {
-                    backLeft.setPower(0);
-                    backRight.setPower(0);
-                    frontLeft.setPower(0);
-                    frontRight.setPower(0);
-                    telemetry.addData("stopped", "moving on");
-                    telemetry.update();
-                    break;
-                }
-            }
-
-        } else {//backward
-            backRight.setDirection(DcMotor.Direction.FORWARD);
-            backLeft.setDirection(DcMotor.Direction.REVERSE);
-            frontRight.setDirection(DcMotor.Direction.FORWARD);
-            frontLeft.setDirection(DcMotor.Direction.REVERSE);
-            backRight.setPower(-power);
-            frontLeft.setPower(power);
-            frontRight.setPower(-power);
-            backLeft.setPower(power);
-
-            while (opModeIsActive()) {
-                if ((System.currentTimeMillis() - startTime) >= time) {
-                    backLeft.setPower(0);
-                    backRight.setPower(0);
-                    frontLeft.setPower(0);
-                    frontRight.setPower(0);
-                    break;
-                }
-            }
-        }
-    }
-
-    public void delay(double delayTime){
-        double startTime = System.currentTimeMillis();
-        while (System.currentTimeMillis() - startTime < delayTime && opModeIsActive());
-        return;
-    }
+   
 
     public static class SkystoneDeterminationPipeline extends OpenCvPipeline
     {
