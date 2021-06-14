@@ -94,7 +94,7 @@ public class FINAL_TELEOP extends LinearOpMode {
         drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         Pose2d newPose = new Pose2d(0, 0, Math.toRadians(180));
-        multiplier = 1410;
+        multiplier = Constants.shooterPower;
         double psMultiplier = 1315;
 
         waitForStart();
@@ -103,15 +103,12 @@ public class FINAL_TELEOP extends LinearOpMode {
 
         while (opModeIsActive() && !isStopRequested()) {
             telemetry.addData("Target Velo: ", multiplier);
-
-            //  double elapsed = System.currentTimeMillis() - startTime;
             currentStateOfT1 = g2.left_bumper;
             currentStateOfT2 = g2.right_bumper;
             currentY2 = g2.y;
             currentA1 = g1.x;
             currentY = g1.y;
             currentDpad = g1.dpad_down;
-            currentX = g2.x;
             isDownDown = g2.dpad_down;
             isDownUp = g2.dpad_up;
 
@@ -144,7 +141,7 @@ public class FINAL_TELEOP extends LinearOpMode {
             else shooter1.setVelocity(-g2.left_stick_y * multiplier);
 
             if (g2.b && g2.left_trigger == 1) psMultiplier = 1315;
-            else if (g2.b) multiplier = 1400;
+            else if (g2.b) multiplier = Constants.shooterPower;
 
             if (g1.dpad_down && currentDpad != false) {
                 drive.setPoseEstimate(newPose);
@@ -159,8 +156,8 @@ public class FINAL_TELEOP extends LinearOpMode {
                 wobbler2.setPosition(1);
             }
 
-            if (g1.left_bumper || g2.a) pusher.setPosition(0.45);
-            else pusher.setPosition(0.58);
+            if (g1.left_bumper || g2.a) pusher.setPosition(Constants.frontShooterServo);
+            else pusher.setPosition(Constants.backShooterServo);
 
             if (g2.x) extend1.setPosition(0);
             else extend1.setPosition(0.9);
@@ -219,20 +216,20 @@ public class FINAL_TELEOP extends LinearOpMode {
     }
 
     public void shootRings(int num) {
-        drive.setWeightedDrivePower(new Pose2d(-gamepad1.left_stick_y, -gamepad1.left_stick_x,-gamepad1.right_stick_x));
+        drive.setWeightedDrivePower(new Pose2d(-gamepad1.left_stick_y, -gamepad1.left_stick_x, -gamepad1.right_stick_x));
         shooter1.setVelocity(multiplier);
-        drive.setWeightedDrivePower(new Pose2d(-gamepad1.left_stick_y, -gamepad1.left_stick_x,-gamepad1.right_stick_x));
+        drive.setWeightedDrivePower(new Pose2d(-gamepad1.left_stick_y, -gamepad1.left_stick_x, -gamepad1.right_stick_x));
         sleep(500);
-        drive.setWeightedDrivePower(new Pose2d(-gamepad1.left_stick_y, -gamepad1.left_stick_x,-gamepad1.right_stick_x));
+        drive.setWeightedDrivePower(new Pose2d(-gamepad1.left_stick_y, -gamepad1.left_stick_x, -gamepad1.right_stick_x));
         for (int i = 1; i <= num; i++) {
-            sleep(100);
-            drive.setWeightedDrivePower(new Pose2d(-gamepad1.left_stick_y, -gamepad1.left_stick_x,-gamepad1.right_stick_x));
-            pusher.setPosition(Constants.frontShooterServo);
-            drive.setWeightedDrivePower(new Pose2d(-gamepad1.left_stick_y, -gamepad1.left_stick_x,-gamepad1.right_stick_x));
             sleep(200);
-            drive.setWeightedDrivePower(new Pose2d(-gamepad1.left_stick_y, -gamepad1.left_stick_x,-gamepad1.right_stick_x));
+            drive.setWeightedDrivePower(new Pose2d(-gamepad1.left_stick_y, -gamepad1.left_stick_x, -gamepad1.right_stick_x));
+            pusher.setPosition(Constants.frontShooterServo);
+            drive.setWeightedDrivePower(new Pose2d(-gamepad1.left_stick_y, -gamepad1.left_stick_x, -gamepad1.right_stick_x));
+            sleep(300);
+            drive.setWeightedDrivePower(new Pose2d(-gamepad1.left_stick_y, -gamepad1.left_stick_x, -gamepad1.right_stick_x));
             pusher.setPosition(Constants.backShooterServo);
-            drive.setWeightedDrivePower(new Pose2d(-gamepad1.left_stick_y, -gamepad1.left_stick_x,-gamepad1.right_stick_x));
+            drive.setWeightedDrivePower(new Pose2d(-gamepad1.left_stick_y, -gamepad1.left_stick_x, -gamepad1.right_stick_x));
         }
     }
 
