@@ -19,7 +19,7 @@
  * SOFTWARE.
  */
 
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.Debugs;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
@@ -29,9 +29,11 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.teamcode.Current_Auton.Constants;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
@@ -45,22 +47,19 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvInternalCamera;
 import org.openftc.easyopencv.OpenCvPipeline;
 
-@Autonomous(name="OpenCVDebugRed")
-public class OpenCVDebugRed extends LinearOpMode
-
-{
+@TeleOp(name = "OpenCVDebugRed")
+public class OpenCVDebugRed extends LinearOpMode {
     OpenCvCamera phoneCam;
     SkystoneDeterminationPipeline pipeline;
     DcMotor wobbler_motor = null;
     Servo wobble_servo = null;
     DcMotorEx shooter = null;
-    Servo pusher =null;
+    Servo pusher = null;
     DcMotor intake = null;
     WebcamName webcamName;
 
     @Override
-    public void runOpMode()
-    {
+    public void runOpMode() {
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
         webcamName = hardwareMap.get(WebcamName.class, "webcam");
         wobbler_motor = hardwareMap.dcMotor.get("wobble_motor");
@@ -71,36 +70,44 @@ public class OpenCVDebugRed extends LinearOpMode
         pusher = hardwareMap.servo.get("mover");
         intake = hardwareMap.dcMotor.get("intake");
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-        phoneCam = OpenCvCameraFactory.getInstance().createWebcam(webcamName,cameraMonitorViewId);
+        phoneCam = OpenCvCameraFactory.getInstance().createWebcam(webcamName, cameraMonitorViewId);
         pipeline = new SkystoneDeterminationPipeline();
         phoneCam.setPipeline(pipeline);
 
         // We set the viewport policy to optimized view so the preview doesn't appear 90 deg
         // out when the RC activity is in portrait. We do our actual image processing assuming
         // landscape orientation, though.
- //       phoneCam.setViewportRenderingPolicy(OpenCvCamera.ViewportRenderingPolicy.OPTIMIZE_VIEW);
+        //       phoneCam.setViewportRenderingPolicy(OpenCvCamera.ViewportRenderingPolicy.OPTIMIZE_VIEW);
 
-        phoneCam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
-        {
+        phoneCam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
             @Override
-            public void onOpened()
-            {
-                phoneCam.startStreaming(320,240, OpenCvCameraRotation.UPRIGHT);
+            public void onOpened() {
+                phoneCam.startStreaming(320, 240, OpenCvCameraRotation.UPRIGHT);
             }
         });
-
 
 
         telemetry.addData("Analysis", pipeline.getAnalysis());
         telemetry.addData("Position", pipeline.position);
 
+        Gamepad g1 = gamepad1;
+        Gamepad g2 = gamepad2;
+
+        boolean isDownDown = false;
+        boolean isDownUp = false;
+        boolean isDownDown2 = false;
+        boolean isDownUp2 = false;
 
         waitForStart();
 
-        if(isStopRequested()) return;
+        if (isStopRequested()) return;
 
-        while (opModeIsActive())
-        {
+        while (opModeIsActive()) {
+            isDownDown = g1.dpad_down;
+            isDownUp = g1.dpad_up;
+            isDownDown2 = g2.dpad_down;
+            isDownUp2 = g2.dpad_up;
+
             telemetry.addData("Analysis", pipeline.getAnalysis());
             telemetry.addData("Position", pipeline.position);
             telemetry.update();
@@ -108,19 +115,32 @@ public class OpenCVDebugRed extends LinearOpMode
 
             telemetry.update();
 
+            if (gamepad1.dpad_down && isDownDown) {
+                Constants.oneRingThresholdRed--;
+                pipeline.ONE_RING_THRESHOLD = Constants.oneRingThresholdRed;
+            }
+            if (gamepad1.dpad_up && isDownUp) {
+                Constants.oneRingThresholdRed++;
+                pipeline.ONE_RING_THRESHOLD = Constants.oneRingThresholdRed;
+            }
+            if (gamepad2.dpad_down && isDownDown2) {
+                Constants.fourRingThresholdRed--;
+                pipeline.FOUR_RING_THRESHOLD = Constants.fourRingThresholdRed;
+            }
+            if (gamepad2.dpad_up && isDownUp2) {
+                Constants.fourRingThresholdRed++;
+                pipeline.FOUR_RING_THRESHOLD = Constants.fourRingThresholdRed;
+            }
+
             // Don't burn CPU cycles busy-looping in this sample
             sleep(50);
 
-            if (pipeline.position== SkystoneDeterminationPipeline.RingPosition.ONE)
-            {
-                telemetry.addData("Position 1",pipeline.position );
-            }
-            else if (pipeline.position== SkystoneDeterminationPipeline.RingPosition.FOUR)
-            {
-                telemetry.addData("Position 4",pipeline.position );
-            }
-            else{
-                telemetry.addData("Position 0",pipeline.position );
+            if (pipeline.position == SkystoneDeterminationPipeline.RingPosition.ONE) {
+                telemetry.addData("Position 1", pipeline.position);
+            } else if (pipeline.position == SkystoneDeterminationPipeline.RingPosition.FOUR) {
+                telemetry.addData("Position 4", pipeline.position);
+            } else {
+                telemetry.addData("Position 0", pipeline.position);
             }
 
         }
@@ -132,8 +152,6 @@ public class OpenCVDebugRed extends LinearOpMode
         String backrightMotorName = "back_right";
         String frontleftMotorName = "front_left";
         String backleftMotorName = "back_left";
-
-
 
 
         DcMotor backRight = hardwareMap.dcMotor.get(backrightMotorName);
@@ -189,19 +207,17 @@ public class OpenCVDebugRed extends LinearOpMode
         }
     }
 
-    public void delay(double delayTime){
+    public void delay(double delayTime) {
         double startTime = System.currentTimeMillis();
-        while (System.currentTimeMillis() - startTime < delayTime && opModeIsActive());
+        while (System.currentTimeMillis() - startTime < delayTime && opModeIsActive()) ;
         return;
     }
 
-    public static class SkystoneDeterminationPipeline extends OpenCvPipeline
-    {
+    public static class SkystoneDeterminationPipeline extends OpenCvPipeline {
         /*
          * An enum to define the skystone position
          */
-        public enum RingPosition
-        {
+        public enum RingPosition {
             FOUR,
             ONE,
             NONE
@@ -216,13 +232,13 @@ public class OpenCVDebugRed extends LinearOpMode
         /*
          * The core values which define the location and size of the sample regions
          */
-        static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(270,192);
+        static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(270, 192);
 
         static final int REGION_WIDTH = 25;
         static final int REGION_HEIGHT = 35;
 
-        final int FOUR_RING_THRESHOLD = 157;
-        final int ONE_RING_THRESHOLD = 130;
+        int FOUR_RING_THRESHOLD = Constants.fourRingThresholdRed;
+        int ONE_RING_THRESHOLD = Constants.oneRingThresholdRed;
 
         Point region1_pointA = new Point(
                 REGION1_TOPLEFT_ANCHOR_POINT.x,
@@ -246,23 +262,20 @@ public class OpenCVDebugRed extends LinearOpMode
          * This function takes the RGB frame, converts to YCrCb,
          * and extracts the Cb channel to the 'Cb' variable
          */
-        void inputToCb(Mat input)
-        {
+        void inputToCb(Mat input) {
             Imgproc.cvtColor(input, YCrCb, Imgproc.COLOR_RGB2YCrCb);
             Core.extractChannel(YCrCb, Cb, 1);
         }
 
         @Override
-        public void init(Mat firstFrame)
-        {
+        public void init(Mat firstFrame) {
             inputToCb(firstFrame);
 
             region1_Cb = Cb.submat(new Rect(region1_pointA, region1_pointB));
         }
 
         @Override
-        public Mat processFrame(Mat input)
-        {
+        public Mat processFrame(Mat input) {
             inputToCb(input);
 
             avg1 = (int) Core.mean(region1_Cb).val[0];
@@ -275,11 +288,11 @@ public class OpenCVDebugRed extends LinearOpMode
                     2); // Thickness of the rectangle lines
 
             position = RingPosition.FOUR; // Record our analysis
-            if(avg1 > FOUR_RING_THRESHOLD){
+            if (avg1 > FOUR_RING_THRESHOLD) {
                 position = RingPosition.FOUR;
-            }else if (avg1 > ONE_RING_THRESHOLD){
+            } else if (avg1 > ONE_RING_THRESHOLD) {
                 position = RingPosition.ONE;
-            }else{
+            } else {
                 position = RingPosition.NONE;
             }
 
@@ -293,8 +306,7 @@ public class OpenCVDebugRed extends LinearOpMode
             return input;
         }
 
-        public int getAnalysis()
-        {
+        public int getAnalysis() {
             return avg1;
         }
     }
