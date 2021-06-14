@@ -143,6 +143,9 @@ public class OpenCVDebugRed extends LinearOpMode {
                 telemetry.addData("Position 0", pipeline.position);
             }
 
+            telemetry.addData("FOUR RING Threshold", pipeline.ONE_RING_THRESHOLD);
+            telemetry.addData("FOUR RING Threshold", pipeline.FOUR_RING_THRESHOLD);
+
         }
     }
 

@@ -64,7 +64,7 @@ public class ComplexBlue extends LinearOpMode {
     Trajectory toWobble2 = null;
 
 
-    Pose2d shootingPosition = new Pose2d(64, 12, Math.toRadians(180));
+    Pose2d shootingPosition = new Pose2d(64, -10, Math.toRadians(180));
 
     public void oneRing() {
         toDepot = drive.trajectoryBuilder(new Pose2d())
@@ -87,7 +87,7 @@ public class ComplexBlue extends LinearOpMode {
                 .build();
 
         toShoot = drive.trajectoryBuilder(toDepot.end())
-                .lineToLinearHeading(new Pose2d(shootingPosition.getX(), shootingPosition.getY() - 5, shootingPosition.getHeading()))
+                .lineToLinearHeading(new Pose2d(shootingPosition.getX(), shootingPosition.getY() + 3, shootingPosition.getHeading()))
                 .addTemporalMarker(0.1, () -> {
                     wobbler_motor.setPower(-0.8);
                     shooter.setVelocity(shooterPower);
@@ -108,20 +108,20 @@ public class ComplexBlue extends LinearOpMode {
                     wobble_servo.setPosition(0);
                     wobbler_motor.setPower(0.8);
                 })
-                .addTemporalMarker(secondWobble + 0.2,()->{
+                .addTemporalMarker(secondWobble - 0.1, () -> {
                     wobbler_motor.setPower(0);
                 })
                 .build();
 
         double wobbleX = 18;
         toWobble1 = drive.trajectoryBuilder(intakeRings.end())
-                .lineToLinearHeading(new Pose2d(wobbleX, 10, Math.toRadians(-90)))
+                .lineToLinearHeading(new Pose2d(wobbleX, 10, Math.toRadians(90)))
                 .addTemporalMarker(0.8, () -> {
                     intake.setPower(-1);
                 })
                 .build();
         toWobble2 = drive.trajectoryBuilder(toWobble1.end())
-                .lineToLinearHeading(new Pose2d(wobbleX, -10, Math.toRadians(-90)))
+                .lineToLinearHeading(new Pose2d(wobbleX, -11, Math.toRadians(90)))
                 .addTemporalMarker(0.99, 0, () -> {
                     wobble_servo.setPosition(1);
                     wobble_servo2.setPosition(1);
@@ -129,19 +129,23 @@ public class ComplexBlue extends LinearOpMode {
                 .build();
 
         toShoot2 = drive.trajectoryBuilder(toWobble2.end())
-                .lineToLinearHeading(new Pose2d(shootingPosition.getX() - 10, shootingPosition.getY() + 5, shootingPosition.getHeading()))
+                .lineToLinearHeading(new Pose2d(shootingPosition.getX(), shootingPosition.getY() + 3, shootingPosition.getHeading()))
                 .addTemporalMarker(0.1, () -> {
                     wobbler_motor.setPower(-0.8);
                 })
-                .addTemporalMarker(0.5, () -> {
+                .addTemporalMarker(secondWobble + 0.4, () -> {
                     wobbler_motor.setPower(0);
                 })
                 .build();
 
         toDepot2 = drive.trajectoryBuilder(toShoot2.end())
                 .lineToLinearHeading(new Pose2d(85, -8, Math.toRadians(180)))
-                .addTemporalMarker(0.1,()->{
+                .addTemporalMarker(0.1, () -> {
                     intake.setPower(0);
+                    wobbler_motor.setPower(-0.8);
+                })
+                .addTemporalMarker(secondWobble - 0.3, () -> {
+                    wobbler_motor.setPower(0);
                 })
                 .addDisplacementMarker(0.95, 0, () -> {
                     wobble_servo.setPosition(0);
@@ -201,21 +205,21 @@ public class ComplexBlue extends LinearOpMode {
                 .addTemporalMarker(secondWobble, () -> {
                     wobbler_motor.setPower(0);
                 })
-                .addTemporalMarker(0.99,0,()->{
+                .addTemporalMarker(0.99, 0, () -> {
                     wobble_servo.setPosition(1);
                     wobble_servo2.setPosition(1);
                 })
                 .build();
 
         toDepot2 = drive.trajectoryBuilder(toWobble2.end())
-                .lineToLinearHeading(new Pose2d(63, -7, Math.toRadians(90)))
+                .lineToLinearHeading(new Pose2d(63, -6, Math.toRadians(-90)))
                 .addTemporalMarker(0.1, () -> {
                     wobbler_motor.setPower(-0.8);
                 })
                 .addTemporalMarker(0.3, () -> {
                     wobbler_motor.setPower(0);
                 })
-                .addTemporalMarker(0.95,0,()->{
+                .addTemporalMarker(0.95, 0, () -> {
                     wobble_servo.setPosition(0);
                     wobble_servo2.setPosition(0);
 
@@ -230,7 +234,7 @@ public class ComplexBlue extends LinearOpMode {
 
     public void fourRings() {
         toDepot = drive.trajectoryBuilder(new Pose2d())
-                .splineTo(new Vector2d(105, 14), Math.toRadians(180))
+                .splineTo(new Vector2d(105, 17), Math.toRadians(180))
                 .addTemporalMarker(1, () -> {
                     wobble_servo.setPosition(1);
                     wobble_servo2.setPosition(1);
@@ -248,7 +252,7 @@ public class ComplexBlue extends LinearOpMode {
 
 
         toShoot = drive.trajectoryBuilder(toDepot.end())
-                .lineToLinearHeading(shootingPosition)
+                .lineToLinearHeading(new Pose2d(shootingPosition.getX(), shootingPosition.getY() + 5, shootingPosition.getHeading()))
                 .addTemporalMarker(0.1, () -> {
                     shooter.setVelocity(shooterPower);
                     wobbler_motor.setPower(-0.5);
@@ -271,21 +275,21 @@ public class ComplexBlue extends LinearOpMode {
                     wobble_servo.setPosition(0);
                     wobbler_motor.setPower(0.8);
                 })
-                .addTemporalMarker(secondWobble + 0.2,()->{
+                .addTemporalMarker(secondWobble - 0.1, () -> {
                     wobbler_motor.setPower(0);
                 })
                 .build();
 
         double wobbleX = 18;
         toWobble1 = drive.trajectoryBuilder(intakeRings.end())
-                .lineToLinearHeading(new Pose2d(wobbleX, 10, Math.toRadians(-90)))
+                .lineToLinearHeading(new Pose2d(wobbleX, 10, Math.toRadians(90)))
                 .addTemporalMarker(0.8, () -> {
                     intake.setPower(-1);
                 })
                 .build();
 
         toWobble2 = drive.trajectoryBuilder(toWobble1.end())
-                .lineToLinearHeading(new Pose2d(wobbleX, -10, Math.toRadians(-90)))
+                .lineToLinearHeading(new Pose2d(wobbleX, -10, Math.toRadians(90)))
                 .addTemporalMarker(0.99, 0, () -> {
                     wobble_servo.setPosition(1);
                     wobble_servo2.setPosition(1);
@@ -293,11 +297,11 @@ public class ComplexBlue extends LinearOpMode {
                 .build();
 
         toShoot2 = drive.trajectoryBuilder(toWobble2.end())
-                .lineToLinearHeading(new Pose2d(shootingPosition.getX() - 10, shootingPosition.getY(), shootingPosition.getHeading()))
+                .lineToLinearHeading(new Pose2d(shootingPosition.getX(), shootingPosition.getY(), shootingPosition.getHeading()))
                 .addTemporalMarker(0.1, () -> {
                     wobbler_motor.setPower(-0.8);
                 })
-                .addTemporalMarker(0.5, () -> {
+                .addTemporalMarker(secondWobble + 0.4, () -> {
                     wobbler_motor.setPower(0);
                 })
                 .addTemporalMarker(0.99, 0, () -> {
@@ -306,7 +310,13 @@ public class ComplexBlue extends LinearOpMode {
                 .build();
 
         toDepot2 = drive.trajectoryBuilder(toShoot2.end())
-                .lineToLinearHeading(new Pose2d(110, -21, Math.toRadians(-135)))
+                .lineToLinearHeading(new Pose2d(110, 17, Math.toRadians(-135)))
+                .addTemporalMarker(0.1, () -> {
+                    wobbler_motor.setPower(-0.8);
+                })
+                .addTemporalMarker(secondWobble - 0.3, () -> {
+                    wobbler_motor.setPower(0);
+                })
                 .addDisplacementMarker(0.95, 0.5, () -> {
                     wobble_servo.setPosition(0);
                     wobble_servo2.setPosition(0);
@@ -420,7 +430,7 @@ public class ComplexBlue extends LinearOpMode {
             shooter.setVelocity(shooterPower);
             drive.followTrajectory(toShoot);
             shootRings(3);
-            shooter.setVelocity(-0.5 * shooterPower);
+            shooter.setVelocity(-shooterPower);
             if (initial != none) {
                 drive.followTrajectory(position);
                 drive.followTrajectory(intakeRings);
@@ -428,7 +438,7 @@ public class ComplexBlue extends LinearOpMode {
                 drive.followTrajectory(toWobble2);
                 shooter.setVelocity(shooterPower);
                 drive.followTrajectory(toShoot2);
-                shootRings(initial == four ? 4 : 2, 1440);
+                shootRings(initial == four ? 4 : 2);
                 shooter.setVelocity(0);
             } else {
                 drive.followTrajectory(toWobble1);
@@ -452,12 +462,12 @@ public class ComplexBlue extends LinearOpMode {
         static final Scalar BLUE = new Scalar(0, 0, 255);
         static final Scalar GREEN = new Scalar(0, 255, 0);
 
-        static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(55, 188);
+        static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(270, 192);
 
         static final int REGION_WIDTH = 25;
         static final int REGION_HEIGHT = 35;
 
-        final int FOUR_RING_THRESHOLD = 153;
+        final int FOUR_RING_THRESHOLD = 157;
         final int ONE_RING_THRESHOLD = 130;
 
 

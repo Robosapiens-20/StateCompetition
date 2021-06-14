@@ -107,7 +107,7 @@ public class ComplexRed extends LinearOpMode {
                     wobble_servo.setPosition(0);
                     wobbler_motor.setPower(0.8);
                 })
-                .addTemporalMarker(secondWobble + 0.2,()->{
+                .addTemporalMarker(secondWobble + 0.3, () -> {
                     wobbler_motor.setPower(0);
                 })
                 .build();
@@ -120,7 +120,7 @@ public class ComplexRed extends LinearOpMode {
                 })
                 .build();
         toWobble2 = drive.trajectoryBuilder(toWobble1.end())
-                .lineToLinearHeading(new Pose2d(wobbleX, 10, Math.toRadians(-90)))
+                .lineToLinearHeading(new Pose2d(wobbleX, 13, Math.toRadians(-90)))
                 .addTemporalMarker(0.99, 0, () -> {
                     wobble_servo.setPosition(1);
                     wobble_servo2.setPosition(1);
@@ -128,19 +128,23 @@ public class ComplexRed extends LinearOpMode {
                 .build();
 
         toShoot2 = drive.trajectoryBuilder(toWobble2.end())
-                .lineToLinearHeading(new Pose2d(shootingPosition.getX() - 10, shootingPosition.getY() + 5, shootingPosition.getHeading()))
+                .lineToLinearHeading(new Pose2d(shootingPosition.getX(), shootingPosition.getY() + 5, shootingPosition.getHeading()))
                 .addTemporalMarker(0.1, () -> {
                     wobbler_motor.setPower(-0.8);
                 })
-                .addTemporalMarker(0.5, () -> {
+                .addTemporalMarker(secondWobble + 0.4, () -> {
                     wobbler_motor.setPower(0);
                 })
                 .build();
 
         toDepot2 = drive.trajectoryBuilder(toShoot2.end())
                 .lineToLinearHeading(new Pose2d(85, 25, Math.toRadians(180)))
-                .addTemporalMarker(0.1,()->{
+                .addTemporalMarker(0.1, () -> {
                     intake.setPower(0);
+                    wobbler_motor.setPower(0.8);
+                })
+                .addTemporalMarker(secondWobble - 0.3, () -> {
+                    wobbler_motor.setPower(0);
                 })
                 .addDisplacementMarker(0.95, 0, () -> {
                     wobble_servo.setPosition(0);
@@ -155,7 +159,7 @@ public class ComplexRed extends LinearOpMode {
 
     public void zeroRing() {
         toDepot = drive.trajectoryBuilder(new Pose2d())
-                .splineTo(new Vector2d(57, -18), Math.toRadians(180))
+                .splineTo(new Vector2d(50, -18), Math.toRadians(180))
                 .addTemporalMarker(1, () -> {
                     wobble_servo.setPosition(1);
                     wobble_servo2.setPosition(1);
@@ -199,7 +203,7 @@ public class ComplexRed extends LinearOpMode {
                 .addTemporalMarker(secondWobble, () -> {
                     wobbler_motor.setPower(0);
                 })
-                .addTemporalMarker(0.99,0,()->{
+                .addTemporalMarker(0.99, 0, () -> {
                     wobble_servo.setPosition(1);
                     wobble_servo2.setPosition(1);
                 })
@@ -213,7 +217,7 @@ public class ComplexRed extends LinearOpMode {
                 .addTemporalMarker(0.3, () -> {
                     wobbler_motor.setPower(0);
                 })
-                .addTemporalMarker(0.95,0,()->{
+                .addTemporalMarker(0.95, 0, () -> {
                     wobble_servo.setPosition(0);
                     wobble_servo2.setPosition(0);
 
@@ -259,17 +263,17 @@ public class ComplexRed extends LinearOpMode {
                 .build();
 
         position = drive.trajectoryBuilder(toShoot.end())
-                .lineToLinearHeading(new Pose2d(62, 14, Math.toRadians(180)))
+                .lineToLinearHeading(new Pose2d(62, 12, Math.toRadians(180)))
                 .build();
 
         intakeRings = drive.trajectoryBuilder(position.end())
-                .forward(50)
+                .forward(40)
                 .addTemporalMarker(0.1, () -> {
                     intake.setPower(intakePower);
                     wobble_servo.setPosition(0);
                     wobbler_motor.setPower(0.8);
                 })
-                .addTemporalMarker(secondWobble + 0.2,()->{
+                .addTemporalMarker(secondWobble + 0.1, () -> {
                     wobbler_motor.setPower(0);
                 })
                 .build();
@@ -277,13 +281,13 @@ public class ComplexRed extends LinearOpMode {
         double wobbleX = 7;
         toWobble1 = drive.trajectoryBuilder(intakeRings.end())
                 .lineToLinearHeading(new Pose2d(wobbleX, -10, Math.toRadians(-90)))
-                .addTemporalMarker(0.8, () -> {
-                    intake.setPower(-1);
+                .addTemporalMarker(0.1, () -> {
+                    intake.setPower(0);
                 })
                 .build();
 
         toWobble2 = drive.trajectoryBuilder(toWobble1.end())
-                .lineToLinearHeading(new Pose2d(wobbleX, 10, Math.toRadians(-90)))
+                .lineToLinearHeading(new Pose2d(wobbleX, 11, Math.toRadians(-90)))
                 .addTemporalMarker(0.99, 0, () -> {
                     wobble_servo.setPosition(1);
                     wobble_servo2.setPosition(1);
@@ -291,11 +295,14 @@ public class ComplexRed extends LinearOpMode {
                 .build();
 
         toShoot2 = drive.trajectoryBuilder(toWobble2.end())
-                .lineToLinearHeading(new Pose2d(shootingPosition.getX() - 10, shootingPosition.getY(), shootingPosition.getHeading()))
+                .lineToLinearHeading(new Pose2d(shootingPosition.getX(), shootingPosition.getY(), shootingPosition.getHeading()))
                 .addTemporalMarker(0.1, () -> {
                     wobbler_motor.setPower(-0.8);
                 })
-                .addTemporalMarker(0.5, () -> {
+                .addTemporalMarker(0.5,()->{
+                    intake.setPower(-1);
+                })
+                .addTemporalMarker(secondWobble + 0.4, () -> {
                     wobbler_motor.setPower(0);
                 })
                 .addTemporalMarker(0.99, 0, () -> {
@@ -305,6 +312,12 @@ public class ComplexRed extends LinearOpMode {
 
         toDepot2 = drive.trajectoryBuilder(toShoot2.end())
                 .lineToLinearHeading(new Pose2d(110, -17, Math.toRadians(180)))
+                .addTemporalMarker(0.1, () -> {
+                    wobbler_motor.setPower(0.8);
+                })
+                .addTemporalMarker(secondWobble - 0.3, () -> {
+                    wobbler_motor.setPower(0);
+                })
                 .addDisplacementMarker(0.95, 0.5, () -> {
                     wobble_servo.setPosition(0);
                     wobble_servo2.setPosition(0);
@@ -418,7 +431,7 @@ public class ComplexRed extends LinearOpMode {
             shooter.setVelocity(shooterPower);
             drive.followTrajectory(toShoot);
             shootRings(3);
-            shooter.setVelocity(-0.5 * shooterPower);
+            shooter.setVelocity(-shooterPower);
             if (initial != none) {
                 drive.followTrajectory(position);
                 drive.followTrajectory(intakeRings);
@@ -426,7 +439,7 @@ public class ComplexRed extends LinearOpMode {
                 drive.followTrajectory(toWobble2);
                 shooter.setVelocity(shooterPower);
                 drive.followTrajectory(toShoot2);
-                shootRings(initial == four ? 4 : 2, 1440);
+                shootRings(initial == four ? 4 : 2);
                 shooter.setVelocity(0);
             } else {
                 drive.followTrajectory(toWobble1);

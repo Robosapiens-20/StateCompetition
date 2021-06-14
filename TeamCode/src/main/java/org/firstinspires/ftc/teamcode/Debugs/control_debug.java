@@ -46,7 +46,7 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvInternalCamera;
 import org.openftc.easyopencv.OpenCvPipeline;
 
-@Autonomous(name = "OpenCVDebug1")
+@Autonomous(name = "OpenCVDebugController")
 public class control_debug extends LinearOpMode {
     OpenCvCamera camera;
     SkystoneDeterminationPipeline pipeline;
@@ -89,21 +89,20 @@ public class control_debug extends LinearOpMode {
         });
 
 
-
-            while(!opModeIsActive())
-            {
-                if (g1.dpad_up)
+        while (!isStopRequested() && !isStarted()) {
+            if (g1.dpad_up)
                 pipeline.FOUR_RING_THRESHOLD = pipeline.FOUR_RING_THRESHOLD + 1;
-                if(g1.dpad_down)
-                    pipeline.FOUR_RING_THRESHOLD = pipeline.FOUR_RING_THRESHOLD - 1;
-                if(g1.dpad_left)
-                    pipeline.ONE_RING_THRESHOLD = pipeline.ONE_RING_THRESHOLD+1;
-                if(g1.dpad_right)
-                    pipeline.ONE_RING_THRESHOLD = pipeline.ONE_RING_THRESHOLD-1;
-
-                if(g1.a){ telemetry.addData("Analysis", pipeline.getAnalysis());
-                    telemetry.addData("Position", pipeline.position);}
-            }
+            if (g1.dpad_down)
+                pipeline.FOUR_RING_THRESHOLD = pipeline.FOUR_RING_THRESHOLD - 1;
+            if (g1.dpad_left)
+                pipeline.ONE_RING_THRESHOLD = pipeline.ONE_RING_THRESHOLD + 1;
+            if (g1.dpad_right)
+                pipeline.ONE_RING_THRESHOLD = pipeline.ONE_RING_THRESHOLD - 1;
+            telemetry.addData("FOUR RING Threshold", pipeline.ONE_RING_THRESHOLD);
+            telemetry.addData("FOUR RING Threshold", pipeline.FOUR_RING_THRESHOLD);
+            telemetry.addData("Analysis", pipeline.getAnalysis());
+            telemetry.addData("Position", pipeline.position);
+        }
 
 
         waitForStart();

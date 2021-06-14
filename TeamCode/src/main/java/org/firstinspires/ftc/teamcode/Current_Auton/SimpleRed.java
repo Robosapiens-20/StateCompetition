@@ -314,7 +314,7 @@ public class SimpleRed extends LinearOpMode {
             drive.followTrajectory(toShoot);
             shootRings(3);
             shooter.setVelocity(0);
-            shooter.setVelocity(-0.5*shooterPower);
+            shooter.setVelocity(-shooterPower);
             if (initial != none) {
                 drive.followTrajectory(position);
                 drive.followTrajectory(intakeRings);
