@@ -1,24 +1,3 @@
-/*
- * Copyright (c) 2020 OpenFTC Team
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
- */
-
 package org.firstinspires.ftc.teamcode.Debugs;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
@@ -33,6 +12,7 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.teamcode.Current_Auton.Constants;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
@@ -46,23 +26,20 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvInternalCamera;
 import org.openftc.easyopencv.OpenCvPipeline;
 
-@Autonomous(name="OpenCVDebug1")
-public class OpenCVDebug extends LinearOpMode
-
-{
+@TeleOp(name = "OpenCVDebugBlue")
+public class OpenCVDebug extends LinearOpMode {
     OpenCvCamera camera;
     SkystoneDeterminationPipeline pipeline;
     DcMotor wobbler_motor = null;
     Servo wobble_servo = null;
     DcMotorEx shooter = null;
-    Servo pusher =null;
+    Servo pusher = null;
     DcMotor intake = null;
     WebcamName webcamName = null;
-Gamepad g1 = new Gamepad();
+
     @Override
-    public void runOpMode()
-    {
-        webcamName = hardwareMap.get(WebcamName.class,"webcam");
+    public void runOpMode() {
+        webcamName = hardwareMap.get(WebcamName.class, "webcam");
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
         wobbler_motor = hardwareMap.dcMotor.get("wobble_motor");
         wobble_servo = hardwareMap.servo.get("wobble");
@@ -72,22 +49,20 @@ Gamepad g1 = new Gamepad();
         pusher = hardwareMap.servo.get("mover");
         intake = hardwareMap.dcMotor.get("intake");
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-        camera = OpenCvCameraFactory.getInstance().createWebcam(webcamName,cameraMonitorViewId) ;
+        camera = OpenCvCameraFactory.getInstance().createWebcam(webcamName, cameraMonitorViewId);
         pipeline = new SkystoneDeterminationPipeline();
         camera.setPipeline(pipeline);
 
         // We set the viewport policy to optimized view so the preview doesn't appear 90 deg
         // out when the RC activity is in portrait. We do our actual image processing assuming
         // landscape orientation, though.
-     //   camera.setViewportRenderingPolicy(OpenCvCamera.ViewportRenderingPolicy.OPTIMIZE_VIEW);
+        //   camera.setViewportRenderingPolicy(OpenCvCamera.ViewportRenderingPolicy.OPTIMIZE_VIEW);
 
 
-        camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
-        {
+        camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
             @Override
-            public void onOpened()
-            {
-                camera.startStreaming(320,240, OpenCvCameraRotation.UPRIGHT);
+            public void onOpened() {
+                camera.startStreaming(320, 240, OpenCvCameraRotation.UPRIGHT);
             }
         });
 
@@ -95,49 +70,64 @@ Gamepad g1 = new Gamepad();
         telemetry.addData("Analysis", pipeline.getAnalysis());
         telemetry.addData("Position", pipeline.position);
 
+        boolean isDownDown = false;
+        boolean isDownUp = false;
+        boolean isDownDown2 = false;
+        boolean isDownUp2 = false;
+
+        Gamepad g1 = gamepad1;
+        Gamepad g2 = gamepad2;
 
         waitForStart();
 
-        if(isStopRequested()) return;
+        if (isStopRequested()) return;
 
-        while (opModeIsActive())
-        {
+        while (opModeIsActive()) {
+            isDownDown = g1.dpad_down;
+            isDownUp = g1.dpad_up;
+            isDownDown2 = g2.dpad_down;
+            isDownUp2 = g2.dpad_up;
+
             telemetry.addData("Analysis", pipeline.getAnalysis());
             telemetry.addData("Position", pipeline.position);
             telemetry.update();
 
+            if (gamepad1.dpad_down && isDownDown) {
+                Constants.oneRingThresholdBlue--;
+                pipeline.ONE_RING_THRESHOLD = Constants.oneRingThresholdBlue;
+            }
+            if (gamepad1.dpad_up && isDownUp) {
+                Constants.oneRingThresholdBlue++;
+                pipeline.ONE_RING_THRESHOLD = Constants.oneRingThresholdBlue;
+            }
+            if (gamepad2.dpad_down && isDownDown2) {
+                Constants.fourRingThresholdBlue--;
+                pipeline.FOUR_RING_THRESHOLD = Constants.fourRingThresholdBlue;
+            }
+            if (gamepad2.dpad_up && isDownUp2) {
+                Constants.fourRingThresholdBlue++;
+                pipeline.FOUR_RING_THRESHOLD = Constants.fourRingThresholdBlue;
+            }
 
-            telemetry.update();
 
-            // Don't burn CPU cycles busy-looping in this sample
+            if (pipeline.position == SkystoneDeterminationPipeline.RingPosition.ONE) {
+                telemetry.addData("Position 1", pipeline.position);
+            } else if (pipeline.position == SkystoneDeterminationPipeline.RingPosition.FOUR) {
+                telemetry.addData("Position 4", pipeline.position);
+            } else {
+                telemetry.addData("Position 0", pipeline.position);
+            }
             sleep(50);
-
-            if (pipeline.position== SkystoneDeterminationPipeline.RingPosition.ONE)
-            {
-                telemetry.addData("Position 1",pipeline.position );
-            }
-            else if (pipeline.position== SkystoneDeterminationPipeline.RingPosition.FOUR)
-            {
-                telemetry.addData("Position 4",pipeline.position );
-            }
-            else{
-                telemetry.addData("Position 0",pipeline.position );
-            }
-
 
         }
     }
 
 
-   
-
-    public static class SkystoneDeterminationPipeline extends OpenCvPipeline
-    {
+    public static class SkystoneDeterminationPipeline extends OpenCvPipeline {
         /*
          * An enum to define the skystone position
          */
-        public enum RingPosition
-        {
+        public enum RingPosition {
             FOUR,
             ONE,
             NONE
@@ -152,13 +142,13 @@ Gamepad g1 = new Gamepad();
         /*
          * The core values which define the location and size of the sample regions
          */
-        static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(55,188);
+        static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(55, 188);
 
         static final int REGION_WIDTH = 25;
         static final int REGION_HEIGHT = 35;
 
-        final int FOUR_RING_THRESHOLD = 160;
-        final int ONE_RING_THRESHOLD = 130;
+        int FOUR_RING_THRESHOLD = Constants.fourRingThresholdBlue;
+        int ONE_RING_THRESHOLD = Constants.oneRingThresholdBlue;
 
         Point region1_pointA = new Point(
                 REGION1_TOPLEFT_ANCHOR_POINT.x,
@@ -182,23 +172,20 @@ Gamepad g1 = new Gamepad();
          * This function takes the RGB frame, converts to YCrCb,
          * and extracts the Cb channel to the 'Cb' variable
          */
-        void inputToCb(Mat input)
-        {
+        void inputToCb(Mat input) {
             Imgproc.cvtColor(input, YCrCb, Imgproc.COLOR_RGB2YCrCb);
             Core.extractChannel(YCrCb, Cb, 1);
         }
 
         @Override
-        public void init(Mat firstFrame)
-        {
+        public void init(Mat firstFrame) {
             inputToCb(firstFrame);
 
             region1_Cb = Cb.submat(new Rect(region1_pointA, region1_pointB));
         }
 
         @Override
-        public Mat processFrame(Mat input)
-        {
+        public Mat processFrame(Mat input) {
             inputToCb(input);
 
             avg1 = (int) Core.mean(region1_Cb).val[0];
@@ -211,11 +198,11 @@ Gamepad g1 = new Gamepad();
                     2); // Thickness of the rectangle lines
 
             position = RingPosition.FOUR; // Record our analysis
-            if(avg1 > FOUR_RING_THRESHOLD){
+            if (avg1 > FOUR_RING_THRESHOLD) {
                 position = RingPosition.FOUR;
-            }else if (avg1 > ONE_RING_THRESHOLD){
+            } else if (avg1 > ONE_RING_THRESHOLD) {
                 position = RingPosition.ONE;
-            }else{
+            } else {
                 position = RingPosition.NONE;
             }
 
@@ -229,8 +216,7 @@ Gamepad g1 = new Gamepad();
             return input;
         }
 
-        public int getAnalysis()
-        {
+        public int getAnalysis() {
             return avg1;
         }
     }
