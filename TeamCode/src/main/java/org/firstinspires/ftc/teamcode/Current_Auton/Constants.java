@@ -6,7 +6,7 @@ public class Constants {
     public static double backShooterServo = 0.57;
     public static double frontShooterServo = 0.45;
     public static int oneRingThresholdRed = 130;
-    public static int fourRingThresholdRed = 160;
-    public static int oneRingThresholdBlue;
-    public static int fourRingThresholdBlue;
+    public static int fourRingThresholdRed = 157;
+    public static int oneRingThresholdBlue = 130;
+    public static int fourRingThresholdBlue = 160;
 }
