@@ -222,6 +222,13 @@ public class SimpleBlue extends LinearOpMode {
             pusher.setPosition(Constants.backShooterServo);
         }
     }
+    
+    public void showPosition(){
+            telemetry.addData("Position X:", drive.getPoseEstimate().getX());
+            telemetry.addData("Position Y:", drive.getPoseEstimate().getY());
+            telemetry.addData("Position Heading:", drive.getPoseEstimate().getHeading());
+            telemetry.update();   
+    }
 
 
     @Override
@@ -301,10 +308,6 @@ public class SimpleBlue extends LinearOpMode {
                 zeroRing();
 
             drive.followTrajectory(toDepot);
-            telemetry.addData("Position X:", drive.getPoseEstimate().getX());
-            telemetry.addData("Position Y:", drive.getPoseEstimate().getY());
-            telemetry.addData("Position Heading:", drive.getPoseEstimate().getHeading());
-            telemetry.update();
             sleep(200);
 
             if (initial == none)
@@ -312,27 +315,16 @@ public class SimpleBlue extends LinearOpMode {
 
             shooter.setVelocity(shooterPower);
             drive.followTrajectory(toShoot);
-            telemetry.addData("Position X:", drive.getPoseEstimate().getX());
-            telemetry.addData("Position Y:", drive.getPoseEstimate().getY());
-            telemetry.addData("Position Heading:", drive.getPoseEstimate().getHeading());
-            telemetry.update();
             shootRings(3);
             shooter.setVelocity(0);
 
             if (initial != none) {
                 shooter.setVelocity(-shooterPower);
                 drive.followTrajectory(position);
-                telemetry.addData("Position X:", drive.getPoseEstimate().getX());
-                telemetry.addData("Position Y:", drive.getPoseEstimate().getY());
-                telemetry.addData("Position Heading:", drive.getPoseEstimate().getHeading());
-                telemetry.update();
                 drive.followTrajectory(intakeRings);
+                
                 shooter.setVelocity(shooterPower);
                 drive.followTrajectory(toShoot2);
-                telemetry.addData("Position X:", drive.getPoseEstimate().getX());
-                telemetry.addData("Position Y:", drive.getPoseEstimate().getY());
-                telemetry.addData("Position Heading:", drive.getPoseEstimate().getHeading());
-                telemetry.update();
                 shootRings(initial == four ? 4 : 2);
                 shooter.setVelocity(0);
             }
