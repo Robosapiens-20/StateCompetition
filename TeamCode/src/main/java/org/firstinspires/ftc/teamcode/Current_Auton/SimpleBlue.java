@@ -315,7 +315,7 @@ public class SimpleBlue extends LinearOpMode {
 
             shooter.setVelocity(shooterPower);
             drive.followTrajectory(toShoot);
-            shootRings(3);
+            shootRings(4);
             shooter.setVelocity(0);
 
             if (initial != none) {
