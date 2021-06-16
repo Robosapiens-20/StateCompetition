@@ -175,7 +175,7 @@ public class RedPowerShots extends LinearOpMode {
             shooter.setVelocity(shooterPower);
             sleep(300);
             pusher.setPosition(Constants.frontShooterServo);
-            sleep(300);
+            sleep(500);
             pusher.setPosition(Constants.backShooterServo);
         }
     }
@@ -186,7 +186,7 @@ public class RedPowerShots extends LinearOpMode {
         for (int i = 1; i <= num; i++) {
             sleep(300);
             pusher.setPosition(Constants.frontShooterServo);
-            sleep(300);
+            sleep(500);
             pusher.setPosition(Constants.backShooterServo);
         }
     }
