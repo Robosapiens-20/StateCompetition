@@ -118,11 +118,11 @@ public class RedPowerShots extends LinearOpMode {
                 .build();
 
         toDepot2 = drive.trajectoryBuilder(toDepot1.end())
-                .lineToLinearHeading(new Pose2d(115, -33, Math.toRadians(0)))
+                .lineToLinearHeading(new Pose2d(115, -38, Math.toRadians(0)))
                 .build();
 
         toDepot3 = drive.trajectoryBuilder(toDepot2.end())
-                .lineToLinearHeading(new Pose2d(90, -33, Math.toRadians(0)))
+                .lineToLinearHeading(new Pose2d(90, -38, Math.toRadians(0)))
                 .addDisplacementMarker(0.95, 0.5, () -> {
                     wobble_servo.setPosition(0);
                     wobble_servo2.setPosition(0);

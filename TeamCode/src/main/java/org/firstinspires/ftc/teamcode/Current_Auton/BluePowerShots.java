@@ -70,17 +70,17 @@ public class BluePowerShots extends LinearOpMode {
                 .build();
 
         middleShot = drive.trajectoryBuilder(rightShot.end())
-                .lineToLinearHeading(new Pose2d(62, -14, Math.toRadians(180)))
+                .lineToLinearHeading(new Pose2d(62, -13, Math.toRadians(180)))
                 .build();
 
         leftShot = drive.trajectoryBuilder(middleShot.end())
-                .lineToLinearHeading(new Pose2d(62, -7, Math.toRadians(180)))
+                .lineToLinearHeading(new Pose2d(62, -5.5, Math.toRadians(180)))
                 .build();
     }
 
     public void oneRing(){
          toDepot1 = drive.trajectoryBuilder(leftShot.end())
-                .lineToLinearHeading(new Pose2d(95, -2, Math.toRadians(-90)))
+                .lineToLinearHeading(new Pose2d(90, -2, Math.toRadians(-90)))
                 .addTemporalMarker(0.1, () -> {
                     wobbler_motor.setPower(0.8);
                 })
@@ -114,11 +114,11 @@ public class BluePowerShots extends LinearOpMode {
                 .build();
 
         toDepot2 = drive.trajectoryBuilder(toDepot1.end())
-                .lineToLinearHeading(new Pose2d(112, 20, Math.toRadians(0)))
+                .lineToLinearHeading(new Pose2d(112, 27, Math.toRadians(0)))
                 .build();
 
         toDepot3 = drive.trajectoryBuilder(toDepot2.end())
-                .lineToLinearHeading(new Pose2d(90, 20, Math.toRadians(0)))
+                .lineToLinearHeading(new Pose2d(90, 27, Math.toRadians(0)))
                 .addDisplacementMarker(0.95, 0.5, () -> {
                     wobble_servo.setPosition(0);wobble_servo2.setPosition(0);
                 })
@@ -129,11 +129,12 @@ public class BluePowerShots extends LinearOpMode {
                 .build();
 
         park2 = drive.trajectoryBuilder(park1.end())
-                .strafeRight(40)
+                .strafeRight(30)
                 .build();
 
+
         park3 = drive.trajectoryBuilder(park2.end())
-                .back(20)
+                .back(25)
                 .build();
     }
 
@@ -156,7 +157,7 @@ public class BluePowerShots extends LinearOpMode {
                 .build();
 
         park1 = drive.trajectoryBuilder(toDepot2.end())
-                .forward(40)
+                .forward(30)
                 .build();
 
         park2 = drive.trajectoryBuilder(park1.end())
@@ -263,7 +264,7 @@ public class BluePowerShots extends LinearOpMode {
             drive.followTrajectory(rightShot);
             shootRings(1);
             drive.followTrajectory(middleShot);
-            shootRings(1,shooterPower-20);
+            shootRings(1,shooterPower);
             drive.followTrajectory(leftShot);
             shootRings(1);
             shooter.setPower(0);
