@@ -208,7 +208,7 @@ public class SimpleBlue extends LinearOpMode {
             shooter.setVelocity(shooterPower);
             sleep(300);
             pusher.setPosition(Constants.frontShooterServo);
-            sleep(300);
+            sleep(500);
             pusher.setPosition(Constants.backShooterServo);
         }
     }
@@ -218,7 +218,7 @@ public class SimpleBlue extends LinearOpMode {
             shooter.setVelocity(power);
             sleep(300);
             pusher.setPosition(Constants.frontShooterServo);
-            sleep(300);
+            sleep(500);
             pusher.setPosition(Constants.backShooterServo);
         }
     }
