@@ -95,7 +95,7 @@ public class FINAL_TELEOP extends LinearOpMode {
 
         Pose2d newPose = new Pose2d(0, 0, Math.toRadians(180));
         multiplier = Constants.shooterPower;
-        double psMultiplier = 1315;
+        double psMultiplier = Constants.powerShotPower;
 
         waitForStart();
 
@@ -140,7 +140,7 @@ public class FINAL_TELEOP extends LinearOpMode {
             if (g2.left_trigger == 1) shooter1.setVelocity(psMultiplier);
             else shooter1.setVelocity(-g2.left_stick_y * multiplier);
 
-            if (g2.b && g2.left_trigger == 1) psMultiplier = 1315;
+            if (g2.b && g2.left_trigger == 1) psMultiplier = Constants.powerShotPower;
             else if (g2.b) multiplier = Constants.shooterPower;
 
             if (g1.dpad_down && currentDpad != false) {

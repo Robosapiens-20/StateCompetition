@@ -66,18 +66,18 @@ public class RedPowerShots extends LinearOpMode {
                 .build();
 
         leftShot = drive.trajectoryBuilder(outOfTheWay.end())
-                .lineToLinearHeading(new Pose2d(62, 20, Math.toRadians(180)))
+                .lineToLinearHeading(new Pose2d(62, 21, Math.toRadians(180)))
                 .addTemporalMarker(0.1, () -> {
                     shooter.setVelocity(shooterPower);
                 })
                 .build();
 
         middleShot = drive.trajectoryBuilder(leftShot.end())
-                .lineToLinearHeading(new Pose2d(62, 11, Math.toRadians(180)))
+                .lineToLinearHeading(new Pose2d(62, 13, Math.toRadians(180)))
                 .build();
 
         rightShot = drive.trajectoryBuilder(middleShot.end())
-                .lineToLinearHeading(new Pose2d(62, 2.5, Math.toRadians(180)))
+                .lineToLinearHeading(new Pose2d(62, 5, Math.toRadians(180)))
                 .build();
     }
 
@@ -97,7 +97,7 @@ public class RedPowerShots extends LinearOpMode {
                 .build();
 
         park1 = drive.trajectoryBuilder(toDepot1.end())
-                .forward(20)
+                .forward(10)
                 .build();
 
         park2 = drive.trajectoryBuilder(park1.end())
@@ -162,11 +162,11 @@ public class RedPowerShots extends LinearOpMode {
                 .build();
 
         park1 = drive.trajectoryBuilder(toDepot2.end())
-                .forward(40)
+                .forward(30)
                 .build();
 
         park2 = drive.trajectoryBuilder(park1.end())
-                .strafeLeft(40)
+                .strafeLeft(45)
                 .build();
     }
 

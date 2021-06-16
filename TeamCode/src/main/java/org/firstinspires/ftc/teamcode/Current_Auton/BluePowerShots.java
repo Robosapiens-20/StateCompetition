@@ -125,11 +125,11 @@ public class BluePowerShots extends LinearOpMode {
                 .build();
 
         park1 = drive.trajectoryBuilder(toDepot3.end())
-                .forward(20)
+                .forward(25)
                 .build();
 
         park2 = drive.trajectoryBuilder(park1.end())
-                .strafeRight(30)
+                .strafeRight(45)
                 .build();
 
 
@@ -170,7 +170,7 @@ public class BluePowerShots extends LinearOpMode {
             shooter.setVelocity(shooterPower);
             sleep(300);
             pusher.setPosition(Constants.frontShooterServo);
-            sleep(500);
+            sleep(1000);
             pusher.setPosition(Constants.backShooterServo);
         }
     }
@@ -181,7 +181,7 @@ public class BluePowerShots extends LinearOpMode {
         for (int i = 1; i <= num; i++) {
             sleep(300);
             pusher.setPosition(Constants.frontShooterServo);
-            sleep(500);
+            sleep(1000);
             pusher.setPosition(Constants.backShooterServo);
         }
     }

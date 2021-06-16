@@ -60,7 +60,7 @@ public class SimpleRed extends LinearOpMode {
     Trajectory positionToPark = null;
     Trajectory park = null;
 
-    Pose2d shootingPosition = new Pose2d(64,12,Math.toRadians(180));
+    Pose2d shootingPosition = new Pose2d(61,12,Math.toRadians(180));
 
     public void oneRing() {
         toDepot = drive.trajectoryBuilder(new Pose2d())

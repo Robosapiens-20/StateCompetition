@@ -54,7 +54,7 @@ public class SimpleBlue extends LinearOpMode {
     Trajectory positionToPark;
     Trajectory park;
 
-    Pose2d shootingPosition = new Pose2d(64, -10, Math.toRadians(180));
+    Pose2d shootingPosition = new Pose2d(61, -10, Math.toRadians(180));
 
     public static PIDFCoefficients MOTOR_VELO_PID = new PIDFCoefficients(50, 0, 3, 13);
 
@@ -334,6 +334,7 @@ public class SimpleBlue extends LinearOpMode {
 
             drive.followTrajectory(park);
             wobble_servo.setPosition(0);
+            intake.setPower(0);
 
             break;
         }
