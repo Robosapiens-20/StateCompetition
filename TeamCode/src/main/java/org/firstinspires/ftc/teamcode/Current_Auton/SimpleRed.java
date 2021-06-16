@@ -216,7 +216,7 @@ public class SimpleRed extends LinearOpMode {
         for (int i = 1; i <= num; i++) {
             shooter.setVelocity(shooterPower);
             sleep(300);
-            pusher.setPosition(0.45);
+            pusher.setPosition(Constants.frontShooterServo);
             sleep(300);
             pusher.setPosition(Constants.backShooterServo);
         }
@@ -226,8 +226,8 @@ public class SimpleRed extends LinearOpMode {
         for (int i = 1; i <= num; i++) {
             shooter.setVelocity(power);
             sleep(300);
-            pusher.setPosition(0.45);
-            sleep(300);
+            pusher.setPosition(Constants.frontShooterServo);
+            sleep(500);
             pusher.setPosition(Constants.backShooterServo);
         }
     }
@@ -312,7 +312,7 @@ public class SimpleRed extends LinearOpMode {
 
             shooter.setVelocity(shooterPower);
             drive.followTrajectory(toShoot);
-            shootRings(3);
+            shootRings(4);
             shooter.setVelocity(0);
             shooter.setVelocity(-shooterPower);
             if (initial != none) {
