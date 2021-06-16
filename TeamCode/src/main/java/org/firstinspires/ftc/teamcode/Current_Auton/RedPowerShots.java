@@ -268,9 +268,9 @@ public class RedPowerShots extends LinearOpMode {
             drive.followTrajectory(leftShot);
             shootRings(1);
             drive.followTrajectory(middleShot);
-            shootRings(1, shooterPower - 20);
+            shootRings(1, shooterPower);
             drive.followTrajectory(rightShot);
-            shootRings(1, shooterPower - 20);
+            shootRings(1, shooterPower - 10);
             shooter.setPower(0);
 
             if (initial == one)
